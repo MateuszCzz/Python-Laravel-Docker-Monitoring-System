@@ -1,0 +1,28 @@
+version: '3'
+services:
+  camera:
+    networks:
+      - projectserver
+    container_name: camera-1 
+    build:
+      context: .
+      dockerfile: Dockerfile
+    devices:
+      - /dev/video0:/dev/video0
+    volumes:
+      - ${PWD}:/src
+      - /testvideo:/testvideo
+      - /tmp/.X11-unix:/tmp/.X11-unix
+      - /tmp/.docker.xauth:/tmp/.docker.xauth
+      - ./vidoes:/videos  
+    environment:
+      - DISPLAY=$DISPLAY
+    privileged: true
+    stdin_open: true # docker run -i
+    tty: true        # docker run -t
+    
+    
+networks:
+  projectserver:
+    name: project-server-1
+    external: true
