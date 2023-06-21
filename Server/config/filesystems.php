@@ -43,7 +43,13 @@ return [
             'visibility' => 'public',
             'throw' => false,
         ],
-
+        'videos' =>[
+            'driver' => 'local',
+            'root' => storage_path('app/videos'),
+            'url' => env('APP_URL').'/storage/videos',
+            'visibility' => 'public',
+        ],
+        
         's3' => [
             'driver' => 's3',
             'key' => env('AWS_ACCESS_KEY_ID'),

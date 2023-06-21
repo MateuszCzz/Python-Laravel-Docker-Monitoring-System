@@ -6,7 +6,7 @@ import glob
 from dotenv import load_dotenv
 
 
-cap = cv2.VideoCapture(0)
+cap = cv2.VideoCapture(-1)
 mog = cv2.createBackgroundSubtractorMOG2()
 motion_detected = False
 output_file = None
@@ -100,20 +100,28 @@ while True:
                 files = {'video': file}
 
                 try:
-                    # Send the request with the data and files, specifying a timeout
-                    response = requests.post(upload_url, data=data, files=files, timeout=5)
+                    # Define the headers with the Accept header
+                    headers = {'Accept': 'application/json'}
+
+                    # Send the request with the data, files, and headers, specifying a timeout
+                    response = requests.post(upload_url, data=data, files=files, headers=headers, timeout=20)
 
                     # Check the response status code
                     if response.status_code == 200:
                         print(f"Video {video_file} uploaded successfully.")
+
+                        # Remove the video file if successfully sent
+                        os.remove(video_file)
+                        print(f"Video {video_file} removed.")
                     else:
                         print(f"Failed to upload video {video_file}. Error: {response.text}")
 
                 except requests.Timeout:
-                    print(f"No response for {video_file} after 5 seconds. Skipping...")
+                    print(f"No response for {video_file} after 20 seconds. Skipping...")
                 except Exception as e:
-                    print(f"Error {e} for {video_file} after 5 seconds. Skipping...")
-        break            
+                    print(f"Error {e} for {video_file} after 20 seconds. Skipping...")
+        break
+
     elif key == ord(delete_videos_key):
         files = glob.glob(os.path.join(absolute_path, '*.avi'))
         for file in files:

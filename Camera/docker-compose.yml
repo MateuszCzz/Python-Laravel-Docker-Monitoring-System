@@ -2,7 +2,7 @@ version: '3'
 services:
   camera:
     networks:
-      - projectserver
+      - server_sail
     container_name: camera-1 
     build:
       context: .
@@ -23,6 +23,6 @@ services:
     
     
 networks:
-  projectserver:
-    name: project-server-1
+  server_sail:
+    name: server_sail
     external: true
